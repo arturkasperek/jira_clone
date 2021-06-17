@@ -28,6 +28,8 @@ There are many showcase/example React projects out there but most of them are wa
 - Client written in Babel powered JavaScript
 - API written in TypeScript and using TypeORM
 
+## Development with docker compose
+* Run `docker-compose up`
 ## Setting up development environment 🛠
 
 - Install [postgreSQL](https://www.postgresql.org/) if you don't have it already and create a database named `jira_development`.

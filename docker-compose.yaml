@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:10.6-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123123
+      POSTGRES_DB: jira_development
+    ports:
+      - 9011:5432
+  frontend:
+    image: node:12.21-alpine
+    ports:
+      - 8080:8080
+    volumes:
+      - ./client/src:/usr/src/app/src
+      - ./client/package.json:/usr/src/app/package.json
+      - ./client/package-lock.json:/usr/src/app/package-lock.json
+      - ./client/jest:/usr/src/app/jest
+      - ./client/.babelrc:/usr/src/app/.babelrc
+      - ./client/jest.config.js:/usr/src/app/jest.config.js
+      - ./client/jsconfig.json:/usr/src/app/jsconfig.json
+      - ./client/server.js:/usr/src/app/server.js
+      - ./client/webpack.config.js:/usr/src/app/webpack.config.js
+      - ./client/webpack.config.production.js:/usr/src/app/webpack.config.production.js
+    command: sh -c "npm install && npm start"
+    working_dir: /usr/src/app
+  backend:
+    image: node:12.21-alpine
+    ports:
+      - 3000:3000
+    volumes:
+      - ./api/src:/usr/src/app/src
+      - ./api/package.json:/usr/src/app/package.json
+      - ./api/package-lock.json:/usr/src/app/package-lock.json
+      - ./api/tsconfig.json:/usr/src/app/tsconfig.json
+      - ./api/tsconfig-paths.js:/usr/src/app/tsconfig-paths.js
+      - .docker.env:/usr/src/app/.env
+    command: sh -c "npm install && npm start"
+    working_dir: /usr/src/app
+    depends_on:
+      - db
